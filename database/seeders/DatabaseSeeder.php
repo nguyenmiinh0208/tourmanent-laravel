@@ -13,11 +13,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Call PhaseSeeder to create phases and sample users
+        $this->call([
+            PhaseSeeder::class,
         ]);
     }
 }

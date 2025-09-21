@@ -4,18 +4,16 @@ services:
   # PHP-FPM Service
   php:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: docker/Dockerfile
     container_name: php_app
     restart: unless-stopped
     working_dir: /var/www/html
     volumes:
-      - ../:/var/www/html
+      - ../:/var/www/html:delegated
       - ./php.ini:/usr/local/etc/php/conf.d/php.ini
     networks:
       - app-network
-    depends_on:
-      - postgres
 
   # Nginx Service
   nginx:
@@ -26,12 +24,12 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ../:/var/www/html
-      - ./nginx/conf.d:/etc/nginx/conf.d
-    networks:
-      - app-network
+      - ../:/var/www/html:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
     depends_on:
       - php
+    networks:
+      - app-network
 
   postgres:
     image: postgres:17
